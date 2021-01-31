@@ -26,6 +26,26 @@ function App() {
           <Block type="logic_operation"></Block>
           <Block type="logic_boolean"></Block>
         </Category>
+        <Category name="Variables" categorystyle="variable_category">
+          <Block type="variables_get"></Block>
+          <Block type="variables_set"></Block>
+        </Category>
+        <Category name="Math" categorystyle="math_category">
+          <Block type="math_number"></Block>
+          <Block type="math_arithmetic"></Block>
+          <Block type="math_modulo"></Block>
+          <Block type="math_single"></Block>
+          <Block type="math_trig"></Block>
+          <Block type="math_constant"></Block>
+          <Block type="math_number_property"></Block>
+        </Category>
+        <Category name="List" categorystyle="list_category">
+          <Block type="lists_create_empty"></Block>
+          <Block type="lists_create_with"></Block>
+          <Block type="lists_repeat"></Block>
+          <Block type="lists_length"></Block>
+          <Block type="lists_isEmpty"></Block>
+        </Category>
       </BlocklyComponent>
     </Layout>
   );

@@ -2,6 +2,7 @@ import "./index.css";
 import React from "react";
 import Blockly from "blockly/core";
 import "blockly/blocks";
+import BlocklyJavaScript from "blockly/javascript"
 import locale from "blockly/msg/en";
 import { Row, Col, Space, Typography, Select, Button } from "antd";
 import Layout from "antd/lib/layout";
@@ -20,6 +21,10 @@ function BlocklyComponent(props) {
     const workSpace = Blockly.inject(editor.current, {
       toolbox: toolbox.current,
       ...rest,
+    });
+    workSpace.addChangeListener(() => {
+      const code = BlocklyJavaScript.workspaceToCode(workSpace);
+      document.getElementById("codeArea").innerText = code;
     });
     if (initialXml) {
       Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(initialXml), workSpace);
@@ -56,7 +61,9 @@ function BlocklyComponent(props) {
                   <Button type="primary">Download</Button>
                 </Space>
               </div>
-              <Content style={{ overflowY: "auto" }}></Content>
+              <Content style={{ overflowY: "auto" }}>
+                <p id="codeArea"></p>
+              </Content>
             </Layout>
           </Content>
         </Col>
