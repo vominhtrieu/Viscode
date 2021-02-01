@@ -1,0 +1,16 @@
+@keyframes cursorFlash {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.cursor {
+  animation: cursorFlash 1s infinite;
+  font-weight: bolder;
+}
