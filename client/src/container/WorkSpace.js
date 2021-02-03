@@ -8,13 +8,7 @@ const { Content, Footer } = Layout;
 
 function WorkSpace() {
   const [code, setCode] = React.useState("");
-  const [consoleOutput, setConsoleOutput] = React.useState("");
   const onWorkSpaceChange = (code) => setCode(code);
-  const runCode = () => {
-    setConsoleOutput("");
-    window.alert = (text) => setConsoleOutput((output) => output + "\n" + text);
-    eval(code);
-  };
 
   return (
     <div style={{ height: "100%", width: "100%", display: "flex" }}>
@@ -51,6 +45,7 @@ function WorkSpace() {
           </Category>
           <Category name="Text" categorystyle="text_category">
             <Block type="text_print"></Block>
+            <Block type="text_prompt"></Block>
             <Block type="text"></Block>
             <Block type="text_length"></Block>
             <Block type="text_multiline"></Block>
@@ -78,6 +73,7 @@ function WorkSpace() {
             <Block type="math_number_property"></Block>
           </Category>
           <Category name="List" categorystyle="list_category">
+            <Block type="lists_getIndex"></Block>
             <Block type="lists_create_empty"></Block>
             <Block type="lists_create_with"></Block>
             <Block type="lists_repeat"></Block>
@@ -87,11 +83,11 @@ function WorkSpace() {
         </BlocklyComponent>
       </div>
       <Layout style={{ height: "100%", width: "25%" }}>
-        <Content style={{ backgroundColor: "black", height: "30%", padding: "5px 10px" }}>
-          <Terminal consoleOutput={consoleOutput} />
+        <Content style={{ height: "35%" }}>
+          <Terminal code={code} />
         </Content>
-        <Content style={{ backgroundColor: "white", height: "70%", border: "none" }}>
-          <ExportArea code={code} runCode={runCode} />
+        <Content style={{ backgroundColor: "white", height: "60%", border: "none" }}>
+          <ExportArea code={code} />
         </Content>
         <Footer style={{ height: "5%", padding: "5px 10px", borderTop: "1px solid #cacaca", textAlign: "center" }}>
           Võ Minh Triều - Nguyễn Hoàng Trung - 2020
