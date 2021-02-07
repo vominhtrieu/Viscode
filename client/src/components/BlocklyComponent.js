@@ -9,7 +9,7 @@ Blockly.setLocale(locale);
 function BlocklyComponent(props) {
   const toolbox = React.useRef(null);
   const editor = React.useRef(null);
-  const { initialXml, children, onWorkSpaceChange, ...rest } = props;
+  const { initialXml, children, onWorkSpaceChange, updateXml, ...rest } = props;
 
   React.useEffect(() => {
     const workSpace = Blockly.inject(editor.current, {
@@ -19,6 +19,7 @@ function BlocklyComponent(props) {
     workSpace.addChangeListener(() => {
       const code = BlocklyJavaScript.workspaceToCode(workSpace);
       onWorkSpaceChange(code);
+      updateXml(Blockly.Xml.workspaceToDom(workSpace));
     });
     if (initialXml) {
       Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(initialXml), workSpace);
