@@ -17,7 +17,7 @@ function ExportArea({ code, runCode }) {
         </Button>
       </Space>
 
-      <p id="codeArea" style={{ overflowY: "auto", borderTop: "1px solid #d9d9d9", whiteSpace: "pre", padding: 5 }}>
+      <p style={{ overflowY: "auto", borderTop: "1px solid #d9d9d9", whiteSpace: "pre", padding: 5 }}>
         {code}
       </p>
     </Layout>
