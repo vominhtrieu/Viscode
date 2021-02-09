@@ -9,7 +9,7 @@ Blockly.setLocale(locale);
 function BlocklyComponent(props) {
   const toolbox = React.useRef(null);
   const editor = React.useRef(null);
-  const { initialXml, children, onWorkSpaceChange, updateXml, ...rest } = props;
+  const { initialXml, children, updateXml, onWorkSpaceChange, ...rest } = props;
 
   React.useEffect(() => {
     const workSpace = Blockly.inject(editor.current, {
