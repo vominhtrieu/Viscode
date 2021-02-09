@@ -60,7 +60,7 @@ function App() {
 
   const saveBlocks = () => {
     const element = document.createElement("a");
-    const file = new Blob([workspaces.find((workspace) => workspace.key === activeKey).xml.toString()], {
+    const file = new Blob([workspaces.find((workspace) => workspace.key === activeKey).xml], {
       type: "text/plain;charset=utf-8",
     });
     element.href = URL.createObjectURL(file);
@@ -79,12 +79,14 @@ function App() {
     setWorkspaces((workspaces) =>
       workspaces.map((workspace) => {
         if (workspace.key === activeKey) {
-          return Object.assign({}, workspace, { xml });
+          return Object.assign({}, workspace, { xml: new XMLSerializer().serializeToString(xml) });
         }
         return workspace;
       })
     );
   };
+
+  console.log(workspaces);
 
   return (
     <Layout style={{ height: "100vh" }}>
