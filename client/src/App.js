@@ -60,7 +60,7 @@ function App() {
 
   const saveBlocks = () => {
     const element = document.createElement("a");
-    const file = new Blob([workspaces.find((workspace) => workspace.key === activeKey).xml], {
+    const file = new Blob([workspaces.find((workspace) => workspace.key === activeKey).xml.toString()], {
       type: "text/plain;charset=utf-8",
     });
     element.href = URL.createObjectURL(file);

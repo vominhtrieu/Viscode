@@ -6,7 +6,6 @@ import "blockly/javascript";
 import "./workspace.css";
 import ExportArea from "../components/ExportArea";
 const { Content, Footer } = Layout;
-const { TabPane } = Tabs;
 
 const DEFAULT_TITLE = "Untitled Workspace";
 
@@ -18,13 +17,7 @@ const DEFAULT_WORKSPACE = {
 
 function WorkSpace({ updateXml }) {
   const [code, setCode] = React.useState("");
-  const [consoleOutput, setConsoleOutput] = React.useState("");
   const onWorkSpaceChange = (code) => setCode(code);
-  const runCode = () => {
-    setConsoleOutput("");
-    window.alert = (text) => setConsoleOutput((output) => output + "\n" + text);
-    eval(code);
-  };
 
   return (
     <div
@@ -70,6 +63,7 @@ function WorkSpace({ updateXml }) {
           </Category>
           <Category name="Text" categorystyle="text_category">
             <Block type="text_print"></Block>
+            <Block type="text_prompt"></Block>
             <Block type="text"></Block>
             <Block type="text_length"></Block>
             <Block type="text_multiline"></Block>
@@ -97,6 +91,7 @@ function WorkSpace({ updateXml }) {
             <Block type="math_number_property"></Block>
           </Category>
           <Category name="List" categorystyle="list_category">
+            <Block type="lists_getIndex"></Block>
             <Block type="lists_create_empty"></Block>
             <Block type="lists_create_with"></Block>
             <Block type="lists_repeat"></Block>
@@ -106,17 +101,11 @@ function WorkSpace({ updateXml }) {
         </BlocklyComponent>
       </div>
       <Layout style={{ height: "100%", width: "25%" }}>
-        <Content
-          style={{
-            backgroundColor: "black",
-            height: "35%",
-            padding: "5px 10px",
-          }}
-        >
-          <Terminal consoleOutput={consoleOutput} />
+        <Content style={{ height: "35%" }}>
+          <Terminal code={code} />
         </Content>
-        <Content style={{ backgroundColor: "white", height: "65%", border: "none" }}>
-          <ExportArea code={code} runCode={runCode} />
+        <Content style={{ backgroundColor: "white", height: "60%", border: "none" }}>
+          <ExportArea code={code} />
         </Content>
         <Footer
           style={{
