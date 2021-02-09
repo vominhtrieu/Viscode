@@ -1,17 +1,32 @@
 import React from "react";
 import Terminal from "../components/Terminal";
-import { Layout } from "antd";
+import { Layout, Tabs } from "antd";
 import BlocklyComponent, { Block, Category } from "../components/BlocklyComponent";
 import "blockly/javascript";
+import "./workspace.css";
 import ExportArea from "../components/ExportArea";
 const { Content, Footer } = Layout;
 
-function WorkSpace() {
+const DEFAULT_TITLE = "Untitled Workspace";
+
+const DEFAULT_WORKSPACE = {
+  title: DEFAULT_TITLE,
+  key: "1",
+  xml: "<xml xmlns='http://www.w3.org/1999/xhtml'></xml>",
+};
+
+function WorkSpace({ updateXml }) {
   const [code, setCode] = React.useState("");
   const onWorkSpaceChange = (code) => setCode(code);
 
   return (
-    <div style={{ height: "100%", width: "100%", display: "flex" }}>
+    <div
+      style={{
+        height: "100%",
+        width: "100%",
+        display: "flex",
+      }}
+    >
       <div
         style={{
           height: "100%",
@@ -19,6 +34,8 @@ function WorkSpace() {
           resize: "horizontal",
           overflow: "auto",
           borderRight: "1px solid #c6c6c6",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         <BlocklyComponent
@@ -28,8 +45,9 @@ function WorkSpace() {
             drag: true,
             wheel: true,
           }}
-          initialXml={`<xml xmlns="http://www.w3.org/1999/xhtml"></xml>`}
+          inititalXml={DEFAULT_WORKSPACE.xml}
           onWorkSpaceChange={onWorkSpaceChange}
+          updateXml={updateXml}
         >
           <Category name="Variables" categorystyle="variable_category">
             <Block type="variables_get"></Block>
@@ -89,7 +107,14 @@ function WorkSpace() {
         <Content style={{ backgroundColor: "white", height: "60%", border: "none" }}>
           <ExportArea code={code} />
         </Content>
-        <Footer style={{ height: "5%", padding: "5px 10px", borderTop: "1px solid #cacaca", textAlign: "center" }}>
+        <Footer
+          style={{
+            height: "5%",
+            padding: "5px 10px",
+            borderTop: "1px solid #cacaca",
+            textAlign: "center",
+          }}
+        >
           Võ Minh Triều - Nguyễn Hoàng Trung - 2020
         </Footer>
       </Layout>
@@ -98,3 +123,4 @@ function WorkSpace() {
 }
 
 export default WorkSpace;
+export { DEFAULT_TITLE, DEFAULT_WORKSPACE };

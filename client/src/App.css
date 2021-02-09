@@ -1,3 +1,7 @@
-.fill-height {
-  height: calc(100vh - 200px);
+.ant-menu-horizontal {
+  line-height: 30px !important;
+}
+
+.ant-tabs-tab {
+  padding: 5px 10px !important;
 }
