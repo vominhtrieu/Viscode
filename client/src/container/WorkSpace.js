@@ -1,10 +1,13 @@
 import React from "react";
 import Terminal from "../components/Terminal";
-import { Layout, Tabs } from "antd";
+import { Layout, message, Tabs } from "antd";
 import BlocklyComponent, { Block, Category } from "../components/BlocklyComponent";
 import "blockly/javascript";
 import "./workspace.css";
 import ExportArea from "../components/ExportArea";
+import axios from "axios";
+import { API_HOST } from "../config/constant";
+import { useParams } from "react-router-dom";
 const { Content, Footer } = Layout;
 
 const DEFAULT_TITLE = "Untitled Workspace";
@@ -16,8 +19,18 @@ const DEFAULT_WORKSPACE = {
 };
 
 function WorkSpace({ updateXml }) {
+  const [xml, setXml] = React.useState(DEFAULT_WORKSPACE.xml);
   const [code, setCode] = React.useState("");
+  const { id } = useParams();
   const onWorkSpaceChange = (code) => setCode(code);
+
+  React.useEffect(() => {
+    if (id)
+      axios
+        .get(`${API_HOST}/my-files/files/${id}`)
+        .then(({ data }) => setXml(data.data))
+        .catch((err) => message.error(err));
+  }, [id]);
 
   return (
     <div
@@ -45,7 +58,7 @@ function WorkSpace({ updateXml }) {
             drag: true,
             wheel: true,
           }}
-          inititalXml={DEFAULT_WORKSPACE.xml}
+          initialXml={xml}
           onWorkSpaceChange={onWorkSpaceChange}
           updateXml={updateXml}
         >

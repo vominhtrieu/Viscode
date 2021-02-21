@@ -7,6 +7,7 @@ import locale from "blockly/msg/en";
 Blockly.setLocale(locale);
 
 function BlocklyComponent(props) {
+  const [workspace, setWorkspace] = React.useState(null);
   const toolbox = React.useRef(null);
   const editor = React.useRef(null);
   const { initialXml, children, updateXml, onWorkSpaceChange, ...rest } = props;
@@ -21,12 +22,22 @@ function BlocklyComponent(props) {
       onWorkSpaceChange(code);
       updateXml(Blockly.Xml.workspaceToDom(workSpace));
     });
+
     if (initialXml) {
       Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(initialXml), workSpace);
     }
+    setWorkspace(workSpace);
 
     // eslint-disable-next-line
   }, []);
+
+  React.useEffect(() => {
+    if (workspace) {
+      Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.textToDom(initialXml), workspace);
+    }
+
+    // eslint-disable-next-line
+  }, [initialXml]);
 
   return (
     <>
