@@ -6,7 +6,7 @@
 <ul>
   <li>Create program by drag and drop blocks into workspace</li>
   <li>Run program in terminal like another language</li>
-  <li>Create account and store programs are store in cloud</li>
+  <li>Create account and store programs store in cloud</li>
   <li>Access file through file manager</li>
   <li>Need not to install external programs</li>
   <li>Real-time sharing your programs with anyone</li>
