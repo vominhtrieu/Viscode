@@ -1,7 +1,10 @@
 import React from "react";
 import Terminal from "../components/Terminal";
 import { Layout, message, Tabs } from "antd";
-import BlocklyComponent, { Block, Category } from "../components/BlocklyComponent";
+import BlocklyComponent, {
+  Block,
+  Category,
+} from "../components/BlocklyComponent";
 import "blockly/javascript";
 import "./workspace.css";
 import ExportArea from "../components/ExportArea";
@@ -22,7 +25,9 @@ function WorkSpace({ updateXml }) {
   const [xml, setXml] = React.useState(DEFAULT_WORKSPACE.xml);
   const [code, setCode] = React.useState("");
   const { id } = useParams();
-  const onWorkSpaceChange = (code) => setCode(code);
+  const onWorkSpaceChange = (code) => {
+    setCode(code);
+  };
 
   React.useEffect(() => {
     if (id)
@@ -117,7 +122,9 @@ function WorkSpace({ updateXml }) {
         <Content style={{ height: "35%" }}>
           <Terminal code={code} />
         </Content>
-        <Content style={{ backgroundColor: "white", height: "60%", border: "none" }}>
+        <Content
+          style={{ backgroundColor: "white", height: "60%", border: "none" }}
+        >
           <ExportArea code={code} />
         </Content>
         <Footer

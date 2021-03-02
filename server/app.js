@@ -5,16 +5,23 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const Folder = require("./models/Folder");
+const http = require("http").createServer(app);
+const socketIo = require("socket.io");
 
-mongoose.connect(process.env.DATABASE_HOST, { useUnifiedTopology: true, useNewUrlParser: true }).then(async () => {
-  try {
-    const folder = await Folder.findOne({ name: "root" });
-    if (!folder) await Folder.create({ name: "root" });
-    console.log("Connected to database");
-  } catch (err) {
-    console.log("Error: ", err);
-  }
-});
+mongoose
+  .connect(process.env.DATABASE_HOST, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  })
+  .then(async () => {
+    try {
+      const folder = await Folder.findOne({ name: "root" });
+      if (!folder) await Folder.create({ name: "root" });
+      console.log("Connected to database");
+    } catch (err) {
+      console.log("Error: ", err);
+    }
+  });
 
 app.use(
   cors({
@@ -25,9 +32,27 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
+const io = socketIo(http, {
+  cors: {
+    origin: process.env.ORIGIN,
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log(socket.id + " connected");
+  socket.join("test-room");
+  socket.on("eventTriggered", (xml) => {
+    socket.to("test-room").emit("eventMirrored", xml);
+    console.log("done");
+  });
+  socket.on("disconnect", (evt) => {
+    console.log(socket.id + " left");
+  });
+});
+
 app.use("/api/my-files/", require("./routes/file"));
 app.get("*", (req, res) => res.sendStatus(404));
 
-app.listen(process.env.PORT, () => {
+http.listen(process.env.PORT, () => {
   console.log("Listening at PORT 5000");
 });
