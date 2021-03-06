@@ -39,15 +39,12 @@ const io = socketIo(http, {
 });
 
 io.on("connection", (socket) => {
-  console.log(socket.id + " connected");
   socket.join("test-room");
-  socket.on("eventTriggered", (xml) => {
-    socket.to("test-room").emit("eventMirrored", xml);
-    console.log("done");
+  socket.on("eventTriggered", (event) => {
+    socket.to("test-room").emit("eventMirrored", event);
   });
-  socket.on("disconnect", (evt) => {
-    console.log(socket.id + " left");
-  });
+
+  socket.on("disconnect", (evt) => {});
 });
 
 app.use("/api/my-files/", require("./routes/file"));
