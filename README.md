@@ -18,3 +18,11 @@
   <li>Frontend: ReactJs, Socket.IO Client, Ant Design</li>
   <li>Database: MongoDB </li>
 </ul>
+
+<h2>Usage</h2>
+<ul>
+  <li>Enter <code>git install</code> in client and server directories</li>
+  <li>Enter <code>npm start</code> in client and server directories</li>
+  <li>Visit localhost:3000</li>
+</ul>
+
