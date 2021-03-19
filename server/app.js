@@ -48,6 +48,7 @@ io.on("connection", (socket) => {
 });
 
 app.use("/api/my-files/", require("./routes/file"));
+app.use("/api/user/", require("./routes/auth"));
 app.get("*", (req, res) => res.sendStatus(404));
 
 http.listen(process.env.PORT, () => {
