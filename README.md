@@ -26,3 +26,5 @@
   <li>Visit localhost:3000</li>
 </ul>
 
+<h2>Demo Images</h2>
+<img src="https://i.imgur.com/IbaUAhf.png" />
