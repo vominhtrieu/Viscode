@@ -1,7 +1,16 @@
 import "./App.css";
 import React from "react";
-import { Button, Layout, Menu } from "antd";
+import { Button, Layout, Menu, Dropdown } from "antd";
 import WorkSpace, { DEFAULT_WORKSPACE } from "./container/WorkSpace";
+import {
+  FileOutlined,
+  FolderOpenOutlined,
+  SaveOutlined,
+  CloseCircleOutlined,
+  QuestionCircleOutlined,
+  InfoCircleOutlined,
+  LogoutOutlined,
+} from "@ant-design/icons";
 import { Content } from "antd/lib/layout/layout";
 import OpenModal from "./components/OpenModal";
 import SaveModal from "./components/SaveModal";
@@ -32,10 +41,47 @@ function App() {
 
   const closeFile = () => window.close();
 
-  const userMenu = (
-    <SubMenu icon={UserOutlined} style={{ float: "right" }}>
-      <Menu.Item>Log out</Menu.Item>
-    </SubMenu>
+  const fileMenu = (
+    <Menu style={{ width: 150 }}>
+      <Menu.Item className="menu-item" icon={<FileOutlined className="menu-item-icon" />}>
+        <a href="/" target="_blank">
+          New File
+        </a>
+      </Menu.Item>
+      <Menu.Item
+        className="menu-item"
+        icon={<FolderOpenOutlined className="menu-item-icon" />}
+        onClick={() => setOpenModalVisible(true)}
+      >
+        Open File
+      </Menu.Item>
+      <Menu.Item className="menu-item" icon={<SaveOutlined className="menu-item-icon" />} onClick={saveBlocks}>
+        Save File
+      </Menu.Item>
+      <Menu.Item
+        danger
+        className="menu-item"
+        icon={<CloseCircleOutlined className="menu-item-icon" />}
+        onClick={closeFile}
+      >
+        Close File
+      </Menu.Item>
+    </Menu>
+  );
+
+  const helpMenu = (
+    <Menu style={{ width: 150 }}>
+      <Menu.Item
+        className="menu-item"
+        icon={<QuestionCircleOutlined className="menu-item-icon" />}
+        onClick={() => setOpenModalVisible(true)}
+      >
+        How to use?
+      </Menu.Item>
+      <Menu.Item icon={<InfoCircleOutlined className="menu-item-icon" />} className="menu-item" onClick={saveBlocks}>
+        About us
+      </Menu.Item>
+    </Menu>
   );
 
   return (
@@ -45,40 +91,46 @@ function App() {
       <SignInModal visible={signInModalVisible} onClose={() => setSignInModalVisible(false)} />
 
       <Layout style={{ height: "100vh" }}>
-        <Header style={{ height: 32, padding: 0, backgroundColor: "white" }}>
-          <Menu mode="horizontal" style={{ backgroundColor: "white" }}>
-            <SubMenu title="File">
-              <Menu.Item style={{ height: 32 }}>
-                <a href="/" target="_blank">
-                  New File
-                </a>
-              </Menu.Item>
-              <Menu.Item onClick={() => setOpenModalVisible(true)} style={{ height: 32 }}>
-                Open File
-              </Menu.Item>
-              <Menu.Item style={{ height: 32 }} onClick={saveBlocks}>
-                Save File
-              </Menu.Item>
-              <Menu.Item onClick={closeFile} style={{ height: 32 }}>
-                Close File
-              </Menu.Item>
-            </SubMenu>
-            <Menu.Item>Help</Menu.Item>
-
+        <Header
+          style={{ height: 48, display: "flex", alignItems: "center", padding: "0 5px", backgroundColor: "white" }}
+        >
+          <Dropdown overlay={fileMenu}>
+            <Button type="text">File</Button>
+          </Dropdown>
+          <Dropdown overlay={helpMenu}>
+            <Button type="text">Help</Button>
+          </Dropdown>
+          <div style={{ marginLeft: "auto", marginRight: 5 }}>
             {AuthService.getCurrentUser() ? (
-              <SubMenu icon={<UserOutlined />} title={AuthService.getCurrentUser().username} style={{ float: "right" }}>
-                <Menu.Item onClick={AuthService.logout}>Log out</Menu.Item>
-              </SubMenu>
+              <Dropdown
+                overlay={
+                  <Menu>
+                    <Menu.Item
+                      icon={<LogoutOutlined className="menu-item-con" />}
+                      danger
+                      className="menu-item"
+                      onClick={AuthService.logout}
+                    >
+                      Log out
+                    </Menu.Item>
+                  </Menu>
+                }
+              >
+                <Button type="text" icon={<UserOutlined className="menu-item-icon" />}>
+                  {AuthService.getCurrentUser().username}
+                </Button>
+              </Dropdown>
             ) : (
-              <>
-                <Menu.Item style={{ float: "right" }}>
-                  <Button onClick={() => setSignInModalVisible(true)} type="primary">
-                    Log In
-                  </Button>
-                </Menu.Item>
-              </>
+              <div>
+                <Button type="text" onClick={() => setSignInModalVisible(true)}>
+                  Log In
+                </Button>
+                <Button type="text" onClick={() => setSignInModalVisible(true)}>
+                  Register
+                </Button>
+              </div>
             )}
-          </Menu>
+          </div>
         </Header>
         <Content style={{ borderTop: "1px solid #C6C6C6" }}>
           <Router>

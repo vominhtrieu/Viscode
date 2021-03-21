@@ -11,9 +11,23 @@
 }
 
 .blocklyToolboxDiv {
-  background-color: rgba(0, 0, 0, 0.08);
+  background-color: #ebebeb;
 }
 
 .blocklyFlyoutBackground {
-  fill: rgba(0, 0, 0, 0.08) !important;
+  fill: #ebebeb !important;
+}
+
+.menu-item {
+  height: 48px;
+  display: flex;
+  align-items: center;
+}
+
+.menu-item-right {
+  text-align: right;
+}
+
+.menu-item-icon {
+  font-size: 20px !important;
 }
