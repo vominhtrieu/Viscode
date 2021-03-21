@@ -31,11 +31,18 @@ function Terminal({ code }) {
     const temp = getWebWorker(code);
     temp.addEventListener("message", (e) => {
       if (e.data.status !== "done") {
+        if (e.data.status === "error") {
+          output.current.innerHTML += `<span style="color: #ff4d4f">${e.data.err.message.replaceAll(
+            "\\n",
+            "<br/>"
+          )}</span>`;
+          return;
+        }
         if (e.data.waitForInput) {
-          output.current.innerHTML += e.data.text.replaceAll("\\n", "<br/>");
+          if (e.data.text !== null) output.current.innerHTML += e.data.text.replaceAll("\\n", "<br/>");
           caret.current.focus();
         } else {
-          output.current.innerHTML += e.data.text.replaceAll("\\n", "<br/>");
+          if (e.data.text !== null) output.current.innerHTML += e.data.text.replaceAll("\\n", "<br/>");
         }
       } else {
         temp.terminate();

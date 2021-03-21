@@ -5,3 +5,15 @@
 .ant-tabs-tab {
   padding: 5px 10px !important;
 }
+
+.blocklyMainBackground {
+  stroke: none;
+}
+
+.blocklyToolboxDiv {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.blocklyFlyoutBackground {
+  fill: rgba(0, 0, 0, 0.08) !important;
+}

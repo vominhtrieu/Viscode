@@ -7,6 +7,8 @@ const getWorkerCode = (code) => `
     const window = {};
     window.input = ""
     window.alert = (text) => {
+        if ((typeof text) !== "string" && text !== null)
+            text = text.toString();
         self.postMessage({ text: text, waitForInput: false, status: "running" })
     };
 
@@ -31,8 +33,13 @@ const getWorkerCode = (code) => `
 
     self.addEventListener("message", (e) => window.input = e.data);
 
-    ${convertToAsync(code)}
-    self.postMessage({status: "done"})
+    try {
+        ${convertToAsync(code)}
+        self.postMessage({status: "done"})
+    }
+    catch (err) {
+        self.postMessage({status: "error", err: err});
+    }
 })()`;
 
 export default getWorkerCode;
