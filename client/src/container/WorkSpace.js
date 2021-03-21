@@ -3,6 +3,7 @@ import Terminal from "../components/Terminal";
 import { Layout, message, Tabs } from "antd";
 import BlocklyComponent, { Block, Category } from "../components/BlocklyComponent";
 import "blockly/javascript";
+import "../blocks/variables";
 import "./workspace.css";
 import ExportArea from "../components/ExportArea";
 import axios from "axios";
@@ -67,12 +68,11 @@ function WorkSpace({ updateXml }) {
           <Category name="Variables" categorystyle="variable_category">
             <Block type="variables_get"></Block>
             <Block type="variables_set"></Block>
+            <Block type="variables_null"></Block>
           </Category>
           <Category name="Procedures" categorystyle="procedure_category">
             <Block type="procedures_defnoreturn"></Block>
             <Block type="procedures_defreturn"></Block>
-            <Block type="procedures_mutatorcontainer"></Block>
-            <Block type="procedures_mutatorarg"></Block>
             <Block type="procedures_callnoreturn"></Block>
             <Block type="procedures_callreturn"></Block>
           </Category>
