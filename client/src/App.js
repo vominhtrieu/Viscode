@@ -30,28 +30,18 @@ function App() {
 
   return (
     <>
-      <OpenModal
-        visible={openModalVisible}
-        onClose={() => setOpenModalVisible(false)}
-      />
-      <SaveModal
-        visible={saveModalVisible}
-        xml={workspace.xml}
-        onClose={() => setSaveModalVisible(false)}
-      />
+      <OpenModal visible={openModalVisible} onClose={() => setOpenModalVisible(false)} />
+      <SaveModal visible={saveModalVisible} xml={workspace.xml} onClose={() => setSaveModalVisible(false)} />
       <Layout style={{ height: "100vh" }}>
-        <Header style={{ height: 32, padding: 0, backgroundColor: "#f0f2f5" }}>
-          <Menu mode="horizontal" style={{ backgroundColor: "#f0f2f5" }}>
+        <Header style={{ height: 32, padding: 0, backgroundColor: "white" }}>
+          <Menu mode="horizontal" style={{ backgroundColor: "white" }}>
             <SubMenu title="File">
               <Menu.Item style={{ height: 32 }}>
                 <a href="/" target="_blank">
                   New File
                 </a>
               </Menu.Item>
-              <Menu.Item
-                onClick={() => setOpenModalVisible(true)}
-                style={{ height: 32 }}
-              >
+              <Menu.Item onClick={() => setOpenModalVisible(true)} style={{ height: 32 }}>
                 Open File
               </Menu.Item>
               <Menu.Item style={{ height: 32 }} onClick={saveBlocks}>
@@ -64,7 +54,7 @@ function App() {
             <Menu.Item>Help</Menu.Item>
           </Menu>
         </Header>
-        <Content>
+        <Content style={{ borderTop: "1px solid #C6C6C6" }}>
           <Router>
             <Switch>
               <Route exact path="/">

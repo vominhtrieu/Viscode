@@ -1,7 +1,6 @@
 import React from "react";
-import { Space, Select, Button, Layout } from "antd";
+import { Button, Layout } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
-const { Option } = Select;
 
 function intellisense(code) {
   code = code.replaceAll("function", `<i style="color: #1687a7">function</i>`);
@@ -13,22 +12,38 @@ function intellisense(code) {
   return code;
 }
 
-function ExportArea({ code }) {
+function ExportArea(props) {
   const container = React.useRef(null);
-  code = intellisense(code);
+  const code = intellisense(props.code);
+
+  const exportFunc = () => {
+    var pom = document.createElement("a");
+    pom.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(props.code));
+    pom.setAttribute("download", "download.js");
+
+    if (document.createEvent) {
+      var event = document.createEvent("MouseEvents");
+      event.initEvent("click", true, true);
+      pom.dispatchEvent(event);
+    } else {
+      pom.click();
+    }
+  };
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <Layout style={{ backgroundColor: "white", width: "100%", height: "100%", display: "flex" }}>
-        <Space style={{ marginLeft: "auto", padding: 5 }}>
-          <Select defaultValue="js" style={{ width: 120 }}>
-            <Option value="js">Javascript</Option>
-            <Option value="cpp">C++</Option>
-            <Option value="py">Python</Option>
-          </Select>
-          <Button type="primary" icon={<DownloadOutlined />} title="Download all code as a file">
+        <div style={{ width: "100%", display: "flex", alignItems: "center", padding: 5 }}>
+          <b>Javascript</b>
+          <Button
+            style={{ marginLeft: "auto" }}
+            type="primary"
+            icon={<DownloadOutlined />}
+            title="Download all code as a file"
+            onClick={exportFunc}
+          >
             Export
           </Button>
-        </Space>
+        </div>
 
         <p
           ref={container}
