@@ -30,11 +30,12 @@ function ExportArea(props) {
     }
   };
   return (
-    <div style={{ width: "100%", height: "100%" }}>
+    <div id="export" style={{ width: "100%", height: "100%" }}>
       <Layout style={{ backgroundColor: "white", width: "100%", height: "100%", display: "flex" }}>
         <div style={{ width: "100%", display: "flex", alignItems: "center", padding: 5 }}>
           <b>Javascript</b>
           <Button
+            id="export-btn"
             style={{ marginLeft: "auto" }}
             type="primary"
             icon={<DownloadOutlined />}

@@ -70,6 +70,7 @@ function Terminal({ code }) {
 
   return (
     <div
+      id="terminal"
       ref={container}
       style={{
         height: "100%",
@@ -101,6 +102,7 @@ function Terminal({ code }) {
           </Button>
         ) : (
           <Button
+            id="run-btn"
             type="primary"
             icon={<CaretRightOutlined />}
             title="Run code in terminal"

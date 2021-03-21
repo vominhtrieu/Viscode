@@ -1,4 +1,5 @@
 import "./App.css";
+import "intro.js/introjs.css";
 import React from "react";
 import { Button, Layout, Menu, Dropdown } from "antd";
 import WorkSpace, { DEFAULT_WORKSPACE } from "./container/WorkSpace";
@@ -18,14 +19,45 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import SignInModal from "./components/SignInModal";
 import AuthService from "./services/auth.services";
 import { UserOutlined } from "@ant-design/icons";
+import AboutUs from "./components/AboutUs";
+import { Steps } from "intro.js-react";
+
 const { Header } = Layout;
-const { SubMenu } = Menu;
+
+const steps = [
+  {
+    element: ".blocklyWorkspace",
+    intro: "This is workspace where you place your blocks and make programs",
+  },
+  {
+    element: ".blocklyToolboxDiv",
+    intro: "This is toolbox where you can choose a block a drop them to workspace",
+  },
+  {
+    element: "#terminal",
+    intro: "This is terminal where you run your program",
+  },
+  {
+    element: "#run-btn",
+    intro: "Click this button to run your program",
+  },
+  {
+    element: "#export",
+    intro: "This is export area, when you are making program, javascript codes will be generated here",
+  },
+  {
+    element: "#export-btn",
+    intro: "Click this button to download code to your device",
+  },
+];
 
 function App() {
   const [workspace, setWorkspace] = React.useState(DEFAULT_WORKSPACE);
   const [openModalVisible, setOpenModalVisible] = React.useState(false);
   const [saveModalVisible, setSaveModalVisible] = React.useState(false);
   const [signInModalVisible, setSignInModalVisible] = React.useState(false);
+  const [aboutUsModalVisible, setAboutUsModalVisible] = React.useState(false);
+  const [helpEnabled, setHelpEnabled] = React.useState(false);
 
   const saveBlocks = () => {
     setSaveModalVisible(true);
@@ -74,11 +106,15 @@ function App() {
       <Menu.Item
         className="menu-item"
         icon={<QuestionCircleOutlined className="menu-item-icon" />}
-        onClick={() => setOpenModalVisible(true)}
+        onClick={() => setHelpEnabled(true)}
       >
         How to use?
       </Menu.Item>
-      <Menu.Item icon={<InfoCircleOutlined className="menu-item-icon" />} className="menu-item" onClick={saveBlocks}>
+      <Menu.Item
+        icon={<InfoCircleOutlined className="menu-item-icon" />}
+        className="menu-item"
+        onClick={() => setAboutUsModalVisible(true)}
+      >
         About us
       </Menu.Item>
     </Menu>
@@ -89,6 +125,8 @@ function App() {
       <OpenModal visible={openModalVisible} onClose={() => setOpenModalVisible(false)} />
       <SaveModal visible={saveModalVisible} xml={workspace.xml} onClose={() => setSaveModalVisible(false)} />
       <SignInModal visible={signInModalVisible} onClose={() => setSignInModalVisible(false)} />
+      <AboutUs visible={aboutUsModalVisible} onClose={() => setAboutUsModalVisible(false)} />
+      <Steps enabled={helpEnabled} steps={steps} initialStep={0} onExit={() => setHelpEnabled(false)} />
 
       <Layout style={{ height: "100vh" }}>
         <Header
