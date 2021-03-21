@@ -1,11 +1,14 @@
 import "./App.css";
 import React from "react";
-import { Layout, Menu } from "antd";
+import { Button, Layout, Menu } from "antd";
 import WorkSpace, { DEFAULT_WORKSPACE } from "./container/WorkSpace";
 import { Content } from "antd/lib/layout/layout";
 import OpenModal from "./components/OpenModal";
 import SaveModal from "./components/SaveModal";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import SignInModal from "./components/SignInModal";
+import AuthService from "./services/auth.services";
+import { UserOutlined } from "@ant-design/icons";
 const { Header } = Layout;
 const { SubMenu } = Menu;
 
@@ -13,6 +16,7 @@ function App() {
   const [workspace, setWorkspace] = React.useState(DEFAULT_WORKSPACE);
   const [openModalVisible, setOpenModalVisible] = React.useState(false);
   const [saveModalVisible, setSaveModalVisible] = React.useState(false);
+  const [signInModalVisible, setSignInModalVisible] = React.useState(false);
 
   const saveBlocks = () => {
     setSaveModalVisible(true);
@@ -28,10 +32,18 @@ function App() {
 
   const closeFile = () => window.close();
 
+  const userMenu = (
+    <SubMenu icon={UserOutlined} style={{ float: "right" }}>
+      <Menu.Item>Log out</Menu.Item>
+    </SubMenu>
+  );
+
   return (
     <>
       <OpenModal visible={openModalVisible} onClose={() => setOpenModalVisible(false)} />
       <SaveModal visible={saveModalVisible} xml={workspace.xml} onClose={() => setSaveModalVisible(false)} />
+      <SignInModal visible={signInModalVisible} onClose={() => setSignInModalVisible(false)} />
+
       <Layout style={{ height: "100vh" }}>
         <Header style={{ height: 32, padding: 0, backgroundColor: "white" }}>
           <Menu mode="horizontal" style={{ backgroundColor: "white" }}>
@@ -52,6 +64,20 @@ function App() {
               </Menu.Item>
             </SubMenu>
             <Menu.Item>Help</Menu.Item>
+
+            {AuthService.getCurrentUser() ? (
+              <SubMenu icon={<UserOutlined />} title={AuthService.getCurrentUser().username} style={{ float: "right" }}>
+                <Menu.Item onClick={AuthService.logout}>Log out</Menu.Item>
+              </SubMenu>
+            ) : (
+              <>
+                <Menu.Item style={{ float: "right" }}>
+                  <Button onClick={() => setSignInModalVisible(true)} type="primary">
+                    Log In
+                  </Button>
+                </Menu.Item>
+              </>
+            )}
           </Menu>
         </Header>
         <Content style={{ borderTop: "1px solid #C6C6C6" }}>
