@@ -3,6 +3,7 @@ import { Modal, List, message, Button, Input } from "antd";
 import axios from "axios";
 import { API_HOST } from "../config/constant";
 import { FileOutlined, FolderOutlined } from "@ant-design/icons";
+import UserService from "../services/user.services";
 
 export default function SaveModal(props) {
   const [parent, setParent] = React.useState(null);
@@ -13,14 +14,13 @@ export default function SaveModal(props) {
   const [selectedItem, setSelectedItem] = React.useState(null);
   React.useEffect(() => {
     if (!props.visible) return;
-    axios
-      .get(`${API_HOST}/my-files`)
-      .then((res) => {
+    UserService.getUserFiles().then((res) => {
+      try {
         setFolder(res.data);
-      })
-      .catch((err) => {
+      } catch (err) {
         message.error(`Cannot fetch your files. ${err}`);
-      });
+      }
+    });
   }, [props.visible]);
 
   const save = () => {
@@ -28,13 +28,12 @@ export default function SaveModal(props) {
     const temp = folder;
     const existedFile = folder.files.find((file) => file.name === fileName);
     if (!existedFile)
-      setFolder(Object.assign({}, folder, { files: [...folder.files, { name: fileName, date: Date.now() }] }));
-    axios
-      .post(`${API_HOST}/my-files/files`, {
-        data: props.xml,
-        parent: folder._id,
-        fileName: fileName,
-      })
+      setFolder(
+        Object.assign({}, folder, {
+          files: [...folder.files, { name: fileName, date: Date.now() }],
+        })
+      );
+    UserService.saveFile(props.xml, folder._id, fileName)
       .then(() => message.success("Saved"))
       .catch((err) => {
         if (!existedFile) setFolder(temp);
@@ -48,23 +47,23 @@ export default function SaveModal(props) {
     if (folderName === "") return;
     closeNewFolder();
     const temp = folder;
-    setFolder(Object.assign({}, folder, { folders: [...folder.folders, { name: folderName, date: Date.now() }] }));
-    axios
-      .post(`${API_HOST}/my-files/folders`, {
-        parent: folder._id,
-        folderName: folderName,
+    setFolder(
+      Object.assign({}, folder, {
+        folders: [...folder.folders, { name: folderName, date: Date.now() }],
       })
-      .catch((err) => {
-        message.error(err);
-        setFolder(temp);
-      });
+    );
+    UserService.createFolder(folderName, folder._id).catch((err) => {
+      message.error(err);
+      setFolder(temp);
+    });
   };
 
-  const checkFolderExisted = Boolean(folder.folders.find((folder) => folder.name === folderName));
+  const checkFolderExisted = Boolean(
+    folder.folders.find((folder) => folder.name === folderName)
+  );
 
   const openFolder = () => {
-    axios
-      .get(`${API_HOST}/my-files/folders/${selectedItem}`)
+    UserService.openFolder(selectedItem)
       .then(({ data }) => {
         setParent(folder);
         setFolder(data);
@@ -148,19 +147,28 @@ export default function SaveModal(props) {
                 padding: "2px 24px",
                 border: "none",
                 cursor: "pointer",
-                background: item._id === selectedItem ? "rgba(0,0,0,0.08)" : "white",
+                background:
+                  item._id === selectedItem ? "rgba(0,0,0,0.08)" : "white",
               }}
             >
               <List.Item.Meta
                 avatar={
                   item.type === "folder" ? (
-                    <FolderOutlined style={{ color: "rgba(0,0,0,0.6)", fontSize: 22 }} />
+                    <FolderOutlined
+                      style={{ color: "rgba(0,0,0,0.6)", fontSize: 22 }}
+                    />
                   ) : (
                     <FileOutlined style={{ fontSize: 22 }} />
                   )
                 }
                 title={
-                  <span style={{ color: item.type === "folder" ? "rgba(0,0,0,0.6)" : "black", fontWeight: "normal" }}>
+                  <span
+                    style={{
+                      color:
+                        item.type === "folder" ? "rgba(0,0,0,0.6)" : "black",
+                      fontWeight: "normal",
+                    }}
+                  >
                     {item.name}
                   </span>
                 }

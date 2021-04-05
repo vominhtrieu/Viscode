@@ -2,6 +2,7 @@ const File = require("../models/File");
 const Folder = require("../models/Folder");
 const fs = require("fs");
 const path = require("path");
+const mongoose = require("mongoose");
 
 if (!fs.existsSync(path.join(__dirname, "../files"))) {
   fs.mkdirSync(path.join(__dirname, "../files"));
@@ -9,7 +10,7 @@ if (!fs.existsSync(path.join(__dirname, "../files"))) {
 
 exports.getMyFiles = async (req, res) => {
   try {
-    const folder = await Folder.findOne({ name: "root" }).populate({
+    const folder = await Folder.findOne({ name: "root", user: mongoose.Types.ObjectId(req.userId) }).populate({
       path: "folders files",
       options: { sort: { name: 1 } },
     });
@@ -22,7 +23,6 @@ exports.getMyFiles = async (req, res) => {
 
 exports.getFolder = async (req, res) => {
   try {
-    console.log(req.params.id);
     const folder = await Folder.findById(req.params.id).populate({
       path: "folders files",
       options: { sort: { name: 1 } },

@@ -15,6 +15,7 @@ export default function SignInModal(props) {
         window.location.reload();
       },
       (error) => {
+        console.log(error);
         message.error("Log in failed. Wrong username or password");
       }
     );

@@ -5,6 +5,10 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  user: {
+    type: mongoose.Types.ObjectId,
+    ref: "User",
+  },
   date: { type: Date, default: Date.now },
 });
 

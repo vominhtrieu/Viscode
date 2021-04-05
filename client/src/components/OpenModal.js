@@ -3,6 +3,7 @@ import { Modal, List, message, Button, Input } from "antd";
 import axios from "axios";
 import { API_HOST } from "../config/constant";
 import { FileOutlined, FolderOutlined } from "@ant-design/icons";
+import UserService from "../services/user.services";
 
 export default function OpenModal(props) {
   const [parent, setParent] = React.useState(null);
@@ -14,14 +15,13 @@ export default function OpenModal(props) {
 
   React.useEffect(() => {
     if (!props.visible) return;
-    axios
-      .get(`${API_HOST}/my-files`)
-      .then((res) => {
+    UserService.getUserFiles().then((res) => {
+      try {
         setFolder(res.data);
-      })
-      .catch((err) => {
+      } catch (err) {
         message.error(`Cannot fetch your files. ${err}`);
-      });
+      }
+    });
   }, [props.visible]);
 
   const closeNewFolder = () => setNewFolderVisible(false);
@@ -30,27 +30,27 @@ export default function OpenModal(props) {
     if (folderName === "") return;
     closeNewFolder();
     const temp = folder;
-    setFolder(Object.assign({}, folder, { folders: [...folder.folders, { name: folderName, date: Date.now() }] }));
-    axios
-      .post(`${API_HOST}/my-files/folders`, {
-        parent: folder._id,
-        folderName: folderName,
+    setFolder(
+      Object.assign({}, folder, {
+        folders: [...folder.folders, { name: folderName, date: Date.now() }],
       })
-      .catch((err) => {
-        message.error(err);
-        setFolder(temp);
-      });
+    );
+    UserService.createFolder(folderName, folder._id).catch((err) => {
+      message.error("Cannot create folder");
+      setFolder(temp);
+    });
   };
 
   const openFile = () => {
     window.open(`/${selectedFile}`);
   };
 
-  const checkFolderExisted = Boolean(folder.folders.find((folder) => folder.name === folderName));
+  const checkFolderExisted = Boolean(
+    folder.folders.find((folder) => folder.name === folderName)
+  );
 
   const openFolder = () => {
-    axios
-      .get(`${API_HOST}/my-files/folders/${selectedItem}`)
+    UserService.openFolder(selectedItem)
       .then(({ data }) => {
         setParent(folder);
         setFolder(data);
@@ -71,7 +71,11 @@ export default function OpenModal(props) {
 
       <div style={{ marginLeft: "auto" }}>
         <Button onClick={props.onClose}>Cancel</Button>
-        <Button onClick={openFile} disabled={selectedFile === null} type="primary">
+        <Button
+          onClick={openFile}
+          disabled={selectedFile === null}
+          type="primary"
+        >
           Open
         </Button>
       </div>
@@ -134,19 +138,28 @@ export default function OpenModal(props) {
                 padding: "2px 24px",
                 border: "none",
                 cursor: "pointer",
-                background: item._id === selectedItem ? "rgba(0,0,0,0.08)" : "white",
+                background:
+                  item._id === selectedItem ? "rgba(0,0,0,0.08)" : "white",
               }}
             >
               <List.Item.Meta
                 avatar={
                   item.type === "folder" ? (
-                    <FolderOutlined style={{ color: "rgba(0,0,0,0.6)", fontSize: 22 }} />
+                    <FolderOutlined
+                      style={{ color: "rgba(0,0,0,0.6)", fontSize: 22 }}
+                    />
                   ) : (
                     <FileOutlined style={{ fontSize: 22 }} />
                   )
                 }
                 title={
-                  <span style={{ color: item.type === "folder" ? "rgba(0,0,0,0.6)" : "black", fontWeight: "normal" }}>
+                  <span
+                    style={{
+                      color:
+                        item.type === "folder" ? "rgba(0,0,0,0.6)" : "black",
+                      fontWeight: "normal",
+                    }}
+                  >
                     {item.name}
                   </span>
                 }

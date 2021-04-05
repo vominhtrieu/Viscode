@@ -17,6 +17,10 @@ const schema = new mongoose.Schema({
       ref: "File",
     },
   ],
+  user: {
+    type: mongoose.Types.ObjectId,
+    ref: "User",
+  },
   date: { type: Date, default: Date.now },
 });
 

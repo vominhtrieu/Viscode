@@ -1,11 +1,12 @@
 import React from "react";
 import { Modal, message, Button, Input, Form, Checkbox } from "antd";
-import axios from "axios";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
 import AuthService from "../services/auth.services";
+import SignInModal from "./SignInModal";
 
 export default function RegisterModal(props) {
+// const [signInModalVisible, setSignInModalVisible] = React.useState(false);
 
   const onFinish = (values) => {
     AuthService.register(values.username, values.password).then(
@@ -20,6 +21,7 @@ export default function RegisterModal(props) {
 
   return (
     <>
+      {/* <SignInModal visible={signInModalVisible} onClose={() => setSignInModalVisible(false)} /> */}
       <Modal
         title="Register new account"
         visible={props.visible}

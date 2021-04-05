@@ -21,6 +21,7 @@ import AuthService from "./services/auth.services";
 import { UserOutlined } from "@ant-design/icons";
 import AboutUs from "./components/AboutUs";
 import { Steps } from "intro.js-react";
+import RegisterModal from "./components/RegisterModal";
 
 const { Header } = Layout;
 
@@ -56,6 +57,7 @@ function App() {
   const [openModalVisible, setOpenModalVisible] = React.useState(false);
   const [saveModalVisible, setSaveModalVisible] = React.useState(false);
   const [signInModalVisible, setSignInModalVisible] = React.useState(false);
+  const [registerModalVisible, setRegisterModalVisible] = React.useState(false);
   const [aboutUsModalVisible, setAboutUsModalVisible] = React.useState(false);
   const [helpEnabled, setHelpEnabled] = React.useState(false);
 
@@ -125,6 +127,7 @@ function App() {
       <OpenModal visible={openModalVisible} onClose={() => setOpenModalVisible(false)} />
       <SaveModal visible={saveModalVisible} xml={workspace.xml} onClose={() => setSaveModalVisible(false)} />
       <SignInModal visible={signInModalVisible} onClose={() => setSignInModalVisible(false)} />
+      <RegisterModal visible={registerModalVisible} onClose={() => setRegisterModalVisible(false)} />
       <AboutUs visible={aboutUsModalVisible} onClose={() => setAboutUsModalVisible(false)} />
       <Steps enabled={helpEnabled} steps={steps} initialStep={0} onExit={() => setHelpEnabled(false)} />
 
@@ -163,7 +166,7 @@ function App() {
                 <Button type="text" onClick={() => setSignInModalVisible(true)}>
                   Log In
                 </Button>
-                <Button type="text" onClick={() => setSignInModalVisible(true)}>
+                <Button type="text" onClick={() => setRegisterModalVisible(true)}>
                   Register
                 </Button>
               </div>

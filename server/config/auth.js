@@ -1,3 +1,6 @@
 module.exports = {
-  secret: "secret-key",
+  tokenSecret: "secret-key",
+  refreshTokenSecret: "another-secret",
+  tokenLife: 600,
+  refreshTokenLife: "12h",
 };
