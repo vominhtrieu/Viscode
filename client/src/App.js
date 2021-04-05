@@ -32,7 +32,8 @@ const steps = [
   },
   {
     element: ".blocklyToolboxDiv",
-    intro: "This is toolbox where you can choose a block a drop them to workspace",
+    intro:
+      "This is toolbox where you can choose a block a drop them to workspace",
   },
   {
     element: "#terminal",
@@ -44,7 +45,8 @@ const steps = [
   },
   {
     element: "#export",
-    intro: "This is export area, when you are making program, javascript codes will be generated here",
+    intro:
+      "This is export area, when you are making program, javascript codes will be generated here",
   },
   {
     element: "#export-btn",
@@ -60,6 +62,13 @@ function App() {
   const [registerModalVisible, setRegisterModalVisible] = React.useState(false);
   const [aboutUsModalVisible, setAboutUsModalVisible] = React.useState(false);
   const [helpEnabled, setHelpEnabled] = React.useState(false);
+  const [currentUser, setCurrentUser] = React.useState(
+    AuthService.getCurrentUser()
+  );
+
+  const updateUser = () => {
+    setCurrentUser(AuthService.getCurrentUser());
+  };
 
   const saveBlocks = () => {
     setSaveModalVisible(true);
@@ -77,7 +86,10 @@ function App() {
 
   const fileMenu = (
     <Menu style={{ width: 150 }}>
-      <Menu.Item className="menu-item" icon={<FileOutlined className="menu-item-icon" />}>
+      <Menu.Item
+        className="menu-item"
+        icon={<FileOutlined className="menu-item-icon" />}
+      >
         <a href="/" target="_blank">
           New File
         </a>
@@ -86,10 +98,16 @@ function App() {
         className="menu-item"
         icon={<FolderOpenOutlined className="menu-item-icon" />}
         onClick={() => setOpenModalVisible(true)}
+        disabled={currentUser === null}
       >
         Open File
       </Menu.Item>
-      <Menu.Item className="menu-item" icon={<SaveOutlined className="menu-item-icon" />} onClick={saveBlocks}>
+      <Menu.Item
+        className="menu-item"
+        icon={<SaveOutlined className="menu-item-icon" />}
+        onClick={saveBlocks}
+        disabled={currentUser === null}
+      >
         Save File
       </Menu.Item>
       <Menu.Item
@@ -124,16 +142,44 @@ function App() {
 
   return (
     <>
-      <OpenModal visible={openModalVisible} onClose={() => setOpenModalVisible(false)} />
-      <SaveModal visible={saveModalVisible} xml={workspace.xml} onClose={() => setSaveModalVisible(false)} />
-      <SignInModal visible={signInModalVisible} onClose={() => setSignInModalVisible(false)} />
-      <RegisterModal visible={registerModalVisible} onClose={() => setRegisterModalVisible(false)} />
-      <AboutUs visible={aboutUsModalVisible} onClose={() => setAboutUsModalVisible(false)} />
-      <Steps enabled={helpEnabled} steps={steps} initialStep={0} onExit={() => setHelpEnabled(false)} />
+      <OpenModal
+        visible={openModalVisible}
+        onClose={() => setOpenModalVisible(false)}
+      />
+      <SaveModal
+        visible={saveModalVisible}
+        xml={workspace.xml}
+        onClose={() => setSaveModalVisible(false)}
+      />
+      <SignInModal
+        visible={signInModalVisible}
+        onClose={() => setSignInModalVisible(false)}
+        updateUser={updateUser}
+      />
+      <RegisterModal
+        visible={registerModalVisible}
+        onClose={() => setRegisterModalVisible(false)}
+      />
+      <AboutUs
+        visible={aboutUsModalVisible}
+        onClose={() => setAboutUsModalVisible(false)}
+      />
+      <Steps
+        enabled={helpEnabled}
+        steps={steps}
+        initialStep={0}
+        onExit={() => setHelpEnabled(false)}
+      />
 
       <Layout style={{ height: "100vh" }}>
         <Header
-          style={{ height: 48, display: "flex", alignItems: "center", padding: "0 5px", backgroundColor: "white" }}
+          style={{
+            height: 48,
+            display: "flex",
+            alignItems: "center",
+            padding: "0 5px",
+            backgroundColor: "white",
+          }}
         >
           <Dropdown overlay={fileMenu}>
             <Button type="text">File</Button>
@@ -157,8 +203,11 @@ function App() {
                   </Menu>
                 }
               >
-                <Button type="text" icon={<UserOutlined className="menu-item-icon" />}>
-                  {AuthService.getCurrentUser().username}
+                <Button
+                  type="text"
+                  icon={<UserOutlined className="menu-item-icon" />}
+                >
+                  {currentUser.username}
                 </Button>
               </Dropdown>
             ) : (
@@ -166,7 +215,10 @@ function App() {
                 <Button type="text" onClick={() => setSignInModalVisible(true)}>
                   Log In
                 </Button>
-                <Button type="text" onClick={() => setRegisterModalVisible(true)}>
+                <Button
+                  type="text"
+                  onClick={() => setRegisterModalVisible(true)}
+                >
                   Register
                 </Button>
               </div>

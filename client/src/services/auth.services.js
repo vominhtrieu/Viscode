@@ -25,7 +25,7 @@ const login = (username, password) => {
 
 const logout = () => {
   localStorage.removeItem("user");
-  window.location.reload();
+  window.location.assign("http://localhost:3000/");
 };
 
 const getCurrentUser = () => {

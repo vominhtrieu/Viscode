@@ -7,15 +7,17 @@ import AuthService from "../services/auth.services";
 import RegisterModal from "./RegisterModal";
 
 export default function SignInModal(props) {
+  const { updateUser } = props;
+
   const [registerModalVisible, setRegisterModalVisible] = React.useState(false);
 
   const onFinish = (values) => {
     AuthService.login(values.username, values.password).then(
       () => {
-        window.location.reload();
+        updateUser();
+        props.onClose();
       },
       (error) => {
-        console.log(error);
         message.error("Log in failed. Wrong username or password");
       }
     );

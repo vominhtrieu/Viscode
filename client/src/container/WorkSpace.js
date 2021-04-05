@@ -9,6 +9,7 @@ import ExportArea from "../components/ExportArea";
 import axios from "axios";
 import { API_HOST } from "../config/constant";
 import { useParams } from "react-router-dom";
+import AuthHeader from "../services/auth-header"
 const { Content, Footer } = Layout;
 
 const DEFAULT_TITLE = "Untitled Workspace";
@@ -30,9 +31,11 @@ function WorkSpace({ updateXml }) {
   React.useEffect(() => {
     if (id)
       axios
-        .get(`${API_HOST}/my-files/files/${id}`)
+        .get(`${API_HOST}/my-files/files/${id}`, {
+          headers: AuthHeader()
+        })
         .then(({ data }) => setXml(data.data))
-        .catch((err) => message.error(err));
+        .catch((err) => message.error(err.message));
   }, [id]);
 
   return (
