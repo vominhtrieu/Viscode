@@ -39,9 +39,14 @@ const io = socketIo(http, {
 });
 
 io.on("connection", (socket) => {
-  socket.join("test-room");
-  socket.on("eventTriggered", (event) => {
-    socket.to("test-room").emit("eventMirrored", event);
+  const fileId = socket.handshake.query.fileId
+  if (fileId !== null && fileId !== undefined ) {
+    socket.join(fileId);
+  }
+  socket.on("eventTriggered", (fileId, event) => {
+    if (fileId !== null) {
+      socket.to(fileId).emit("eventMirrored", event);
+    }
   });
 
   socket.on("disconnect", (evt) => {});

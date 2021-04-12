@@ -40,7 +40,7 @@ export default function SignInModal(props) {
         onCancel={props.onClose}
         footer={null}
       >
-        <Form onFinish={onFinish} on>
+        <Form onFinish={onFinish}>
           <Form.Item name="username">
             <Input
               prefix={<UserOutlined />}

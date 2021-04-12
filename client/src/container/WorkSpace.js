@@ -67,6 +67,7 @@ function WorkSpace({ updateXml }) {
           initialXml={xml}
           onWorkSpaceChange={onWorkSpaceChange}
           updateXml={updateXml}
+          fileId={id}
         >
           <Category name="Variables" categorystyle="variable_category">
             <Block type="variables_get"></Block>

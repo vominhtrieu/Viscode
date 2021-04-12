@@ -29,7 +29,6 @@ module.exports.signUp = (req, res) => {
 };
 
 module.exports.signIn = (req, res) => {
-  console.log(req.body);
   User.findOne({ username: req.body.username }).exec((err, user) => {
     if (err) {
       res.status(500).send({ message: err });

@@ -7,13 +7,12 @@ import locale from "blockly/msg/en";
 import { io } from "socket.io-client";
 import { message } from "antd";
 Blockly.setLocale(locale);
-const socket = io("http://localhost:5000");
 
 function BlocklyComponent(props) {
   const [workspace, setWorkspace] = React.useState(null);
   const toolbox = React.useRef(null);
   const editor = React.useRef(null);
-  const { initialXml, children, updateXml, onWorkSpaceChange, ...rest } = props;
+  const { initialXml, children, updateXml, onWorkSpaceChange, fileId, ...rest } = props;
 
   React.useEffect(() => {
     const tempWorkSpace = Blockly.inject(editor.current, {
@@ -21,12 +20,14 @@ function BlocklyComponent(props) {
       ...rest,
     });
 
+    const socket = io("http://localhost:5000", {query: {fileId: fileId}});
+
     const onChange = (event) => {
       if (event.type !== "finished_loading" && !event.isUiEvent) {
         const code = BlocklyJavaScript.workspaceToCode(tempWorkSpace);
         onWorkSpaceChange(code);
         updateXml(Blockly.Xml.workspaceToDom(tempWorkSpace));
-        socket.emit("eventTriggered", event.toJson());
+        socket.emit("eventTriggered", fileId, event.toJson());
       }
     };
 
