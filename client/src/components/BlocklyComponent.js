@@ -20,7 +20,7 @@ function BlocklyComponent(props) {
       ...rest,
     });
 
-    const socket = io("http://localhost:5000", {query: {fileId: fileId}});
+    const socket = io("http://54.169.204.53:5000", {query: {fileId: fileId}});
 
     const onChange = (event) => {
       if (event.type !== "finished_loading" && !event.isUiEvent) {
